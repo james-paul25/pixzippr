@@ -1,14 +1,16 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 
 const useWatermarkCanvas = (image, settings, onSettingsChange) => {
     const canvasRef = useRef(null);
     const [dragging, setDragging] = useState(false);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
+    const wmImageRef = useRef(null);
 
     const drawCanvas = useCallback(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         const img = new Image();
+        img.crossOrigin = "anonymous";
         img.src = image.preview;
 
         img.onload = () => {
@@ -27,14 +29,11 @@ const useWatermarkCanvas = (image, settings, onSettingsChange) => {
             ctx.translate(settings.left || 50, settings.top || 50);
             ctx.rotate((settings.angle || 0) * Math.PI / 180);
 
-            if (settings.type === 'image' && settings.src) {
-                const wmImg = new Image();
-                wmImg.src = settings.src;
-                wmImg.onload = () => {
-                    const wmWidth = settings.width || wmImg.width * 0.3;
-                    const wmHeight = settings.height || wmImg.height * 0.3;
-                    ctx.drawImage(wmImg, 0, 0, wmWidth, wmHeight);
-                };
+            if (settings.type === 'image' && wmImageRef.current) {
+                const wmImg = wmImageRef.current;
+                const wmWidth = settings.width || wmImg.width * 0.3;
+                const wmHeight = settings.height || wmImg.height * 0.3;
+                ctx.drawImage(wmImg, 0, 0, wmWidth, wmHeight);
             } else {
                 ctx.font = `bold ${settings.fontSize}px ${settings.fontFamily}`;
                 ctx.fillStyle = settings.color || 'white';
@@ -48,6 +47,18 @@ const useWatermarkCanvas = (image, settings, onSettingsChange) => {
             ctx.restore();
         };
     }, [image.preview, settings]);
+
+    useEffect(() => {
+        if (settings.type === 'image' && settings.src) {
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = settings.src;
+            img.onload = () => {
+                wmImageRef.current = img;
+                drawCanvas(); 
+            };
+        }
+    }, [settings.src, settings.type, drawCanvas]);
 
     const handleMouseDown = (e) => {
         setDragging(true);
@@ -63,7 +74,10 @@ const useWatermarkCanvas = (image, settings, onSettingsChange) => {
         const rect = canvasRef.current.getBoundingClientRect();
         const left = e.clientX - rect.left - offset.x;
         const top = e.clientY - rect.top - offset.y;
-        onSettingsChange({ ...settings, left, top });
+
+        const newSettings = { ...settings, left, top };
+        onSettingsChange(newSettings);
+        drawCanvas(); 
     };
 
     const handleMouseUp = () => setDragging(false);
