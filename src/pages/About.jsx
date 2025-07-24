@@ -1,4 +1,3 @@
-// src/pages/About.jsx
 import React from 'react';
 import { Mail, Github } from 'lucide-react';
 import Profile from "../assets/profile.jpg"
@@ -30,7 +29,7 @@ const About = () => {
 
                     <div className="mt-4 flex gap-4 text-indigo-600 dark:text-indigo-400">
                         <a
-                            href="mailto:jamespaul.official@gmail.com"
+                            href="mailto:dacaldacaljamespaul@gmail.com"
                             className="flex items-center gap-2 hover:underline"
                         >
                             <Mail size={18} />

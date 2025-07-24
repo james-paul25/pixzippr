@@ -84,7 +84,7 @@ const WatermarkCanvas = ({ image, settings, onSettingsChange }) => {
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
             >
-                <canvas ref={canvasRef} className="max-w-full" />
+                <canvas ref={canvasRef} className="max-w-m" />
             </div>
 
             <div className="w-full lg:w-96 space-y-4">

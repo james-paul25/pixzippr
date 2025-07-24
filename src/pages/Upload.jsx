@@ -40,6 +40,10 @@ const Upload = () => {
         const updated = [...files];
         updated.splice(index, 1);
         setFiles(updated);
+
+        if (files[index] === selectedImage) {
+            setSelectedImage(null);
+        }
     };
 
     const readFile = (file) =>
@@ -136,7 +140,7 @@ const Upload = () => {
                 <>
                     <ImagePreviewGrid
                         files={files}
-                        removeImage={removeImage}
+                        onRemove={removeImage}
                         onSelect={(img) => setSelectedImage(img)}
                     />
 
