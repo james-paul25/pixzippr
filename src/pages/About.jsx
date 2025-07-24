@@ -18,7 +18,7 @@ const About = () => {
                 <img
                     src={Profile}
                     alt="James Paul"
-                    className="w-32 h-32 rounded-full object-cover border-4 border-indigo-500 shadow-md"
+                    className="w-32 h-32 rounded-full object-cover border-4 border-indigo-500 shadow-md transition transform hover:scale-105 hover:shadow-lg duration-300"
                 />
                 <div>
                     <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">👋 Meet the Developer</h2>
@@ -30,7 +30,7 @@ const About = () => {
                     <div className="mt-4 flex gap-4 text-indigo-600 dark:text-indigo-400">
                         <a
                             href="mailto:dacaldacaljamespaul@gmail.com"
-                            className="flex items-center gap-2 hover:underline"
+                            className="flex items-center gap-2 hover:underline transition transform hover:scale-105 hover:shadow-lg duration-300"
                         >
                             <Mail size={18} />
                             Email
@@ -39,7 +39,7 @@ const About = () => {
                             href="https://github.com/james-paul25"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 hover:underline"
+                            className="flex items-center gap-2 hover:underline transition transform hover:scale-105 hover:shadow-lg duration-300"
                         >
                             <Github size={18} />
                             GitHub
