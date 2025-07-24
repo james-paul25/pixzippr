@@ -40,7 +40,7 @@ const Home = () => {
                     <ShieldCheck size={40} className="text-indigo-500 mb-4" />
                     <h3 className="text-xl font-semibold mb-2">Privacy First</h3>
                     <p className="text-gray-600 dark:text-gray-400">
-                        Your images are processed securely. Nothing is stored on my server.
+                        Your images are processed securely. Nothing is stored on the server.
                     </p>
                 </div>
             </section>

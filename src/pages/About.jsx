@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mail, Github } from 'lucide-react';
-import Profile from "../assets/profile.jpg"
+import Profile from "../assets/profile.jpg";
 
 const About = () => {
     return (
@@ -46,6 +46,20 @@ const About = () => {
                         </a>
                     </div>
                 </div>
+            </div>
+
+            <hr className="my-10 border-gray-300 dark:border-gray-600" />
+
+            <div>
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-100">🚀 What's Next?</h2>
+                <ul className="list-disc list-inside text-base text-gray-700 dark:text-gray-300 space-y-2">
+                    <li><strong>Spring Boot backend (coming soon)</strong> – currently under development.</li>
+                    <li>Allow users to <strong>log in</strong> and save watermark templates.</li>
+                    <li><strong>Store watermark settings per user</strong> for reuse across sessions.</li>
+                    <li><strong>Saved history</strong> for previously watermarked batches.</li>
+                    <li><strong>Bulk image processing server-side</strong> for handling large uploads efficiently.</li>
+                    <li>Background job support for <strong>asynchronous watermarking</strong> and zipping.</li>
+                </ul>
             </div>
 
             <div className="mt-10 text-sm text-gray-500 dark:text-gray-400">
