@@ -3,13 +3,27 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import DropzoneUploader from '../components/DropzoneUploader';
 import ImagePreviewGrid from '../components/ImagePreviewGrid';
-import WatermarkButton from '../components/WatermarkButton';
 import WatermarkCanvas from '../components/WatermarkCanvas';
+import WatermarkButton from '../components/WatermarkButton';
+import ProgressModal from '../modals/ProgressModal';
 
 const Upload = () => {
     const [files, setFiles] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
-    const [watermarkSettings, setWatermarkSettings] = useState({});
+    const [watermarkSettings, setWatermarkSettings] = useState({
+        text: 'PixZippr',
+        fontSize: 24,
+        fontFamily: 'Arial',
+        color: 'white',
+        opacity: 0.5,
+        angle: 0,
+        top: 50,
+        left: 50,
+        type: 'text',
+        src: null,
+    });
+    const [progress, setProgress] = useState(0);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const onDrop = useCallback((acceptedFiles) => {
         const newFiles = acceptedFiles.map((file) => ({
@@ -35,21 +49,22 @@ const Upload = () => {
             reader.readAsDataURL(file);
         });
 
-    const dataURLToBlob = (dataURL) => {
-        const [header, data] = dataURL.split(',');
-        const mime = header.match(/:(.*?);/)[1];
-        const binary = atob(data);
-        const array = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-            array[i] = binary.charCodeAt(i);
-        }
-        return new Blob([array], { type: mime });
+    const dataURLToBlob = (dataurl) => {
+        const arr = dataurl.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) u8arr[n] = bstr.charCodeAt(n);
+        return new Blob([u8arr], { type: mime });
     };
 
     const addWatermarkAndZip = async () => {
+        setIsProcessing(true);
         const zip = new JSZip();
 
-        for (const { file } of files) {
+        for (let i = 0; i < files.length; i++) {
+            const { file } = files[i];
             const imgData = await readFile(file);
             const img = new Image();
 
@@ -75,46 +90,45 @@ const Upload = () => {
                     if (watermarkSettings.type === 'image' && watermarkSettings.src) {
                         const wmImg = new Image();
                         wmImg.onload = () => {
-                            const wmWidth = wmImg.width * 0.3;
-                            const wmHeight = wmImg.height * 0.3;
+                            const wmWidth = watermarkSettings.width || wmImg.width * 0.3;
+                            const wmHeight = watermarkSettings.height || wmImg.height * 0.3;
                             ctx.drawImage(wmImg, 0, 0, wmWidth, wmHeight);
                             ctx.restore();
 
                             const dataUrl = canvas.toDataURL('image/png');
-                            const fileName = `watermarked_${file.name}`;
-                            zip.file(fileName, dataURLToBlob(dataUrl));
+                            zip.file(`watermarked_${file.name}`, dataURLToBlob(dataUrl));
                             resolve();
                         };
                         wmImg.src = watermarkSettings.src;
                     } else {
-                        ctx.font = `bold ${watermarkSettings.fontSize || 24}px ${watermarkSettings.fontFamily || 'Arial'}`;
-                        ctx.fillStyle = 'white';
+                        ctx.font = `bold ${watermarkSettings.fontSize}px ${watermarkSettings.fontFamily}`;
+                        ctx.fillStyle = watermarkSettings.color;
                         ctx.shadowColor = 'rgba(0,0,0,0.3)';
                         ctx.shadowOffsetX = 2;
                         ctx.shadowOffsetY = 2;
                         ctx.shadowBlur = 5;
-                        ctx.fillText(watermarkSettings.text || 'PixZippr', 0, 0);
+                        ctx.fillText(watermarkSettings.text, 0, 0);
                         ctx.restore();
 
                         const dataUrl = canvas.toDataURL('image/png');
-                        const fileName = `watermarked_${file.name}`;
-                        zip.file(fileName, dataURLToBlob(dataUrl));
+                        zip.file(`watermarked_${file.name}`, dataURLToBlob(dataUrl));
                         resolve();
                     }
                 };
                 img.src = imgData;
             });
+
+            setProgress((i + 1) / files.length);
         }
 
         const content = await zip.generateAsync({ type: 'blob' });
         saveAs(content, 'PixZippr_Watermarked.zip');
+        setIsProcessing(false);
     };
 
     return (
         <div className="max-w-5xl mx-auto px-4 py-10">
-            <h1 className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mb-6">
-                Upload Images
-            </h1>
+            <h1 className="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mb-6">Upload Images</h1>
 
             <DropzoneUploader onDrop={onDrop} />
 
@@ -125,19 +139,20 @@ const Upload = () => {
                         removeImage={removeImage}
                         onSelect={(img) => setSelectedImage(img)}
                     />
+
                     {selectedImage && (
                         <WatermarkCanvas
                             image={selectedImage}
-                            watermarkText="PixZippr Demo"
-                            watermarkImage={null}
-                            onUpdate={(canvas, obj) => {
-                                setWatermarkSettings(obj);
-                            }}
+                            settings={watermarkSettings}
+                            onSettingsChange={setWatermarkSettings}
                         />
                     )}
+
                     <WatermarkButton onClick={addWatermarkAndZip} />
                 </>
             )}
+
+            <ProgressModal progress={progress} isVisible={isProcessing} />
         </div>
     );
 };
