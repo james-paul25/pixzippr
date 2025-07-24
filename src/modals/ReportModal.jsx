@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useEscapeClose } from '../hooks/useEscapeClose';
 
 const ReportModal = ({ isOpen, onClose }) => {
+    useEscapeClose();
+
     const [form, setForm] = useState({
         type: '',
         title: '',
