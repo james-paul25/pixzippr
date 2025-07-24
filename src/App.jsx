@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import About from './pages/About';
 import Upload from './pages/Upload';
+import FeedbackWidget from './components/FeedbackWidget';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/upload" element={<Upload />} />
         </Routes>
+        <FeedbackWidget />
       </main>
 
       <Footer />

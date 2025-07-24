@@ -1,12 +1,56 @@
-# React + Vite
+# 📷 PixZippr
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**PixZippr** is a fast, modern web app for **batch watermarking images**, built using **React + Vite + Tailwind CSS** for the frontend and **Spring Boot** for the backend (coming soon).
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- ✅ Drag-and-drop multiple image upload
+- ✅ Add text or image-based watermarks
+- ✅ Live preview with draggable watermark
+- ✅ Customize font, size, opacity, rotation, color
+- ✅ Download all watermarked images as ZIP
+- ✅ Responsive and mobile-friendly UI
+- ✅ Dark mode support
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🧭 How to Use
+
+1. **Upload Images**
+   - Drag and drop images into the uploader or click to select.
+   - Thumbnails will appear in a grid preview.
+
+2. **Select Watermark Type**
+   - Choose either:
+     - `Text` watermark: Customize content, font, size, color, opacity, rotation.
+     - `Image` watermark: Upload a PNG/JPG watermark image.
+
+3. **Customize & Preview**
+   - Use sliders and inputs to fine-tune watermark appearance.
+   - Drag the watermark directly on the preview to position it.
+
+4. **Download**
+   - Click **“Watermark & Download”** to generate a ZIP file with all processed images.
+
+---
+
+## 🔧 Tech Stack
+
+### Frontend
+- ⚛️ React + Vite
+- 🎨 Tailwind CSS
+- 🖼️ Canvas API
+- 📦 jszip, file-saver
+- 📁 react-dropzone
+
+### Backend (Coming Soon)
+- ☕ Spring Boot (Java)
+- 🔒 REST API for image processing, user auth, and history
+- 👤 Allow users to log in and save watermark templates
+- 💾 Store watermark settings per user for reuse across sessions
+- 🕓 Saved history for previously watermarked batches
+- 📂 Bulk image processing server-side for handling large uploads efficiently
+- ⚙️ Background job support for asynchronous watermarking and zipping
+---
