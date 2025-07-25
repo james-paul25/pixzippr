@@ -1,28 +1,21 @@
-// TODO: refactor this to ts file
+import axios from 'axios';
 
 const sendReport = async ({ name, email, body }) => {
 
     try {
-        const res = await fetch(`http://localhost:8080/api/email/send`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name,
-                email,
-                body
-            }),
+        const res = await axios.post('http://localhost:8080/api/email/send', {
+            name,
+            email,
+            body,
         });
 
-        if (!res.ok) throw new Error("Error sending email");
+        console.log(res.data);
+        return res.data;
 
-        const data = await res.text();
-        return data;
-
-    } catch (e) {
-        alert(e);
-        console.log(e);
+    } catch (error) {
+        const errorMessage = error.response?.data || error.message;
+        alert(errorMessage);
+        console.error(error);
     }
 }
 

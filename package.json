@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource/space-grotesk": "^5.2.8",
     "@tailwindcss/vite": "^4.1.11",
+    "axios": "^1.11.0",
     "clsx": "^2.1.1",
     "fabric": "^6.7.1",
     "file-saver": "^2.0.5",

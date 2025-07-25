@@ -10,21 +10,37 @@ const ReportModal = ({ isOpen, onClose }) => {
     const [title, setTitle] = useState(null);
     const [type, setType] = useState(null);
     const [description, setDescription] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formatted = "Report Type: " + type +
-            "\nTitle: " + title +
-            "\nDescription: " + description;
+        setLoading(true);
+        setSuccess(false);
+        setError('');
+
+        const formatted = `
+            <strong>Report Type:</strong> ${type}<br>
+            <strong>Title:</strong> ${title}<br>
+            <strong>Description:</strong> ${description}
+        `;
 
         try {
-            const response = await sendReport({ name: name, email: email, body: formatted });
-            alert(response);
-            console.log(response);
+            await sendReport({ name: name, email: email, body: formatted });
+            setSuccess(true);
+            setName('');
+            setEmail('');
+            setType('');
+            setTitle('');
+            setDescription('');
+
+            setTimeout(() => setSuccess(false), 1000);
+            setLoading(false);
         } catch (e) {
             alert(e);
         }
-        
+
     };
 
     if (!isOpen) return null;
@@ -48,6 +64,7 @@ const ReportModal = ({ isOpen, onClose }) => {
                         <label className="text-sm font-medium">Name</label>
                         <input
                             type="text"
+                            placeholder="John Doe"
                             className="w-full p-2 mt-1 rounded border dark:bg-gray-700 dark:text-white"
                             value={name || ""}
                             onChange={(e) => setName(e.target.value)}
@@ -58,6 +75,7 @@ const ReportModal = ({ isOpen, onClose }) => {
                         <label className="text-sm font-medium">Email</label>
                         <input
                             type="email"
+                            placeholder="johndoe@example.com"
                             className="w-full p-2 mt-1 rounded border dark:bg-gray-700 dark:text-white"
                             value={email || ""}
                             onChange={(e) => setEmail(e.target.value)}
@@ -108,14 +126,28 @@ const ReportModal = ({ isOpen, onClose }) => {
                     </div>
 
 
-                    <div className="flex justify-end pt-2">
+                    <div className="flex flex-col items-end gap-2 pt-2 w-full">
                         <button
                             type="submit"
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow"
+                            disabled={loading}
+                            className="flex items-center justify-center gap-2 px-4 py-2 rounded bg-blue-600 text-white disabled:opacity-50 min-w-[100px]"
                         >
-                            Submit Report
+                            {loading ? (
+                                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                            ) : success ? (
+                                <>
+                                    <span className="text-green-300">✔</span>
+                                </>
+                            ) : (
+                                'Submit'
+                            )}
                         </button>
+
+                        {error && <p className="text-red-500 text-sm">{error}</p>}
+                        {success && <p className="text-green-500 text-sm"></p>}
                     </div>
+
+
                 </form>
             </div>
         </div>
