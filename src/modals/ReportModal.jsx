@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useEscapeClose } from '../hooks/useEscapeClose';
+import { sendReport } from '../services/emailServices';
 
 const ReportModal = ({ isOpen, onClose }) => {
     useEscapeClose(onClose);
@@ -12,8 +13,18 @@ const ReportModal = ({ isOpen, onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // TODO: Send to backend
-        // TODO: refactor this, make post method in services folder
+        const formatted = "Report Type: " + type +
+            "\nTitle: " + title +
+            "\nDescription: " + description;
+
+        try {
+            const response = await sendReport({ name: name, email: email, body: formatted });
+            alert(response);
+            console.log(response);
+        } catch (e) {
+            alert(e);
+        }
+        
     };
 
     if (!isOpen) return null;
