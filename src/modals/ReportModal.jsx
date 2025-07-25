@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useEscapeClose } from '../hooks/useEscapeClose';
-import { sendReport } from '../services/emailServices';
-
+import { handleReportSubmit } from '../services/reportService';
 const ReportModal = ({ isOpen, onClose }) => {
     useEscapeClose(onClose);
 
@@ -14,33 +13,28 @@ const ReportModal = ({ isOpen, onClose }) => {
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setSuccess(false);
-        setError('');
+    const resetForm = () => {
+        setName('');
+        setEmail('');
+        setType('');
+        setTitle('');
+        setDescription('');
+    };
 
-        const formatted = `
-            <strong>Report Type:</strong> ${type}<br>
-            <strong>Title:</strong> ${title}<br>
-            <strong>Description:</strong> ${description}
-        `;
-
-        try {
-            await sendReport({ name: name, email: email, body: formatted });
-            setSuccess(true);
-            setName('');
-            setEmail('');
-            setType('');
-            setTitle('');
-            setDescription('');
-
-            setTimeout(() => setSuccess(false), 1000);
-            setLoading(false);
-        } catch (e) {
-            alert(e);
-        }
-
+    const handleSubmit = (e) => {
+        handleReportSubmit({
+            e,
+            name,
+            email,
+            type,
+            title,
+            description,
+            setLoading,
+            setSuccess,
+            setError,
+            resetForm,
+            onClose,
+          });
     };
 
     if (!isOpen) return null;
