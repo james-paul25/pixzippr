@@ -2,23 +2,18 @@ import React, { useState } from 'react';
 import { useEscapeClose } from '../hooks/useEscapeClose';
 
 const ReportModal = ({ isOpen, onClose }) => {
-    useEscapeClose();
+    useEscapeClose(onClose);
 
-    const [form, setForm] = useState({
-        type: '',
-        title: '',
-        description: '',
-    });
+    const [name, setName] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [title, setTitle] = useState(null);
+    const [type, setType] = useState(null);
+    const [description, setDescription] = useState(null);
 
-    const handleChange = (e) => {
-        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Submitted report:', form);
         // TODO: Send to backend
-        onClose();
+        // TODO: refactor this, make post method in services folder
     };
 
     if (!isOpen) return null;
@@ -39,12 +34,32 @@ const ReportModal = ({ isOpen, onClose }) => {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
+                        <label className="text-sm font-medium">Name</label>
+                        <input
+                            type="text"
+                            className="w-full p-2 mt-1 rounded border dark:bg-gray-700 dark:text-white"
+                            value={name || ""}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </div>
+
+                    <div>
+                        <label className="text-sm font-medium">Email</label>
+                        <input
+                            type="email"
+                            className="w-full p-2 mt-1 rounded border dark:bg-gray-700 dark:text-white"
+                            value={email || ""}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+
+                    <div>
                         <label className="text-sm font-medium">Report Type</label>
                         <select
                             name="type"
                             className="w-full p-2 mt-1 rounded border dark:bg-gray-700 dark:text-white"
-                            value={form.type}
-                            onChange={handleChange}
+                            value={type}
+                            onChange={(e) => setType(e.target.value)}
                             required
                         >
                             <option value="">Select Type</option>
@@ -62,8 +77,8 @@ const ReportModal = ({ isOpen, onClose }) => {
                             name="title"
                             className="w-full p-2 mt-1 rounded border dark:bg-gray-700 dark:text-white"
                             placeholder="Enter report title"
-                            value={form.title}
-                            onChange={handleChange}
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
                             required
                         />
                     </div>
@@ -75,8 +90,8 @@ const ReportModal = ({ isOpen, onClose }) => {
                             rows="4"
                             className="w-full p-2 mt-1 rounded border dark:bg-gray-700 dark:text-white"
                             placeholder="Provide detailed explanation..."
-                            value={form.description}
-                            onChange={handleChange}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
                             required
                         />
                     </div>
