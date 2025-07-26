@@ -53,7 +53,6 @@ const About = () => {
             <div>
                 <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-100">🚀 What's Next?</h2>
                 <ul className="list-disc list-inside text-base text-gray-700 dark:text-gray-300 space-y-2">
-                    <li><strong>Spring Boot backend (coming soon)</strong> – currently under development.</li>
                     <li>Allow users to <strong>log in</strong> and save watermark templates.</li>
                     <li><strong>Store watermark settings per user</strong> for reuse across sessions.</li>
                     <li><strong>Saved history</strong> for previously watermarked batches.</li>
