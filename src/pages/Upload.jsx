@@ -36,6 +36,15 @@ const Upload = () => {
         }
     }, [selectedImage]);
 
+    const onClear = (index) => {
+        const updated = [...files];
+        updated.splice(index, files.length);
+        setFiles(updated);
+        if (files[index] === selectedImage) {
+            setSelectedImage(null);
+        }
+    }
+
     const removeImage = (index) => {
         const updated = [...files];
         updated.splice(index, 1);
@@ -63,6 +72,7 @@ const Upload = () => {
                         files={files}
                         onRemove={removeImage}
                         onSelect={(img) => setSelectedImage(img)}
+                        onClear={onClear}
                     />
 
                     {selectedImage && (
