@@ -46,7 +46,6 @@
 - 📁 react-dropzone
 
 ### Backend (Coming Soon)
-- ☕ Spring Boot (Java)
 - 🔒 REST API for image processing, user auth, and history
 - 👤 Allow users to log in and save watermark templates
 - 💾 Store watermark settings per user for reuse across sessions
