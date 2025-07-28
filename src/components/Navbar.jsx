@@ -5,7 +5,7 @@ import { Menu, X, Moon, Sun } from "lucide-react";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [isDark, setIsDark] = useDarkMode();
+    const [isDark, toggleDark] = useDarkMode();
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -26,7 +26,7 @@ const Navbar = () => {
 
                 <div className="flex items-center gap-4">
                     <button
-                        onClick={() => setIsDark(!isDark)}
+                        onClick={toggleDark}
                         className="text-gray-600 dark:text-gray-300 hover:text-indigo-500 cursor-pointer transition transform hover:scale-105 hover:shadow-lg duration-300"
                         aria-label="Toggle Theme"
                     >
