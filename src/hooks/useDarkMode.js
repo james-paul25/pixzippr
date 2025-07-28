@@ -25,8 +25,7 @@ export default function useDarkMode() {
             localStorage.setItem("theme", "light");
         }
     }, [isDark]);
-
-    // Ensure always returning a stable setter
+    
     const toggleTheme = () => setIsDark(prev => !prev);
 
     return [isDark, toggleTheme];
