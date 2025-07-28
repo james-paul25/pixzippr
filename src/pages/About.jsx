@@ -62,7 +62,7 @@ const About = () => {
             </div>
 
             <div className="mt-10 text-sm text-gray-500 dark:text-gray-400">
-                Version 1.0 – July 2025
+                Version 1.0 – August 2025
             </div>
         </div>
     );

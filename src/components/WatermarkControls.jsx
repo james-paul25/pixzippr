@@ -1,4 +1,3 @@
-// src/components/WatermarkControls.jsx
 import React from 'react';
 
 const WatermarkControls = ({ settings, onSettingsChange }) => {
@@ -61,24 +60,51 @@ const WatermarkControls = ({ settings, onSettingsChange }) => {
                     </div>
                 </>
             ) : (
-                <div>
-                    <label className="block mb-1 font-semibold">Upload Watermark Image</label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                            const file = e.target.files[0];
-                            if (file) {
-                                const reader = new FileReader();
-                                reader.onload = () => {
-                                    onSettingsChange({ ...settings, src: reader.result });
-                                };
-                                reader.readAsDataURL(file);
+                <>
+                    <div>
+                        <label className="block mb-1 font-semibold">Upload Watermark Image</label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = () => {
+                                        onSettingsChange({
+                                            ...settings,
+                                            src: reader.result,
+                                            width: 100,
+                                            height: 100,
+                                        });
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            }}
+                            className="w-full border p-2 rounded"
+                        />
+                    </div>
+                    <div className="flex gap-2">
+                        <input
+                            type="number"
+                            placeholder="Width"
+                            value={settings.width || ''}
+                            onChange={(e) =>
+                                onSettingsChange({ ...settings, width: parseInt(e.target.value) || 100 })
                             }
-                        }}
-                        className="w-full border p-2 rounded"
-                    />
-                </div>
+                            className="w-1/2 border p-2 rounded"
+                        />
+                        <input
+                            type="number"
+                            placeholder="Height"
+                            value={settings.height || ''}
+                            onChange={(e) =>
+                                onSettingsChange({ ...settings, height: parseInt(e.target.value) || 100 })
+                            }
+                            className="w-1/2 border p-2 rounded"
+                        />
+                    </div>
+                </>
             )}
 
             <div>

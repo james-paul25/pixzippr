@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 const sendReport = async ({ name, email, body }) => {
+    const API_URL = import.meta.env.VITE_API_URL;
 
     try {
-        const res = await axios.post('http://localhost:8080/api/email/send', {
+        const res = await axios.post(`${API_URL}/api/email/send`, {
             name,
             email,
             body,

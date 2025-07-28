@@ -55,7 +55,7 @@ const useWatermarkCanvas = (image, settings, onSettingsChange) => {
             img.src = settings.src;
             img.onload = () => {
                 wmImageRef.current = img;
-                drawCanvas(); 
+                drawCanvas();
             };
         }
     }, [settings.src, settings.type, drawCanvas]);
@@ -77,7 +77,7 @@ const useWatermarkCanvas = (image, settings, onSettingsChange) => {
 
         const newSettings = { ...settings, left, top };
         onSettingsChange(newSettings);
-        drawCanvas(); 
+        drawCanvas();
     };
 
     const handleMouseUp = () => setDragging(false);

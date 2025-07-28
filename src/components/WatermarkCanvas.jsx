@@ -24,7 +24,7 @@ const WatermarkCanvas = ({ image, settings, onSettingsChange }) => {
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
             >
-                <canvas ref={canvasRef} className="max-w-m" />
+                <canvas ref={canvasRef} className="max-w-full" />
             </div>
             <WatermarkControls settings={settings} onSettingsChange={onSettingsChange} />
         </div>
