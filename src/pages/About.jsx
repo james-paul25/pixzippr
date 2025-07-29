@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Mail, Github } from 'lucide-react';
 import Profile from "../assets/profile.jpg";
+import { fetchReleases } from '../services/githubService';
+import { formatDate } from '../utils/formatDateUtils';
 
 const About = () => {
+    const [releases, setReleases] = useState([]);
+
+    useEffect(() => {
+        const loadReleases = async () => {
+            try {
+                const res = await fetchReleases();
+                setReleases(res);
+            } catch (e) {
+                console.warn(e);
+            }
+        }
+
+        loadReleases();
+
+    }, []);
+
+    console.log(releases);
+
     return (
         <div className="max-w-4xl mx-auto py-10 px-4">
             <h1 className="text-3xl font-bold mb-6 text-indigo-600 dark:text-indigo-400">About PixZippr</h1>
@@ -62,7 +82,20 @@ const About = () => {
             </div>
 
             <div className="mt-10 text-sm text-gray-500 dark:text-gray-400">
-                Version 1.0 – August 2025
+                <strong>Releases</strong>
+                {releases.map((release, index) => (
+                    <div key={index}>
+                        <a
+                            href={release.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 hover:underline"
+                        >
+                            {release.name}
+                        </a>
+                        <span className="text-gray-400"> – {formatDate(new Date(release.date).toLocaleDateString())}</span>
+                    </div>
+                ))}
             </div>
         </div>
     );
