@@ -13,7 +13,6 @@ const fetchReleases = async () => {
             tags.map(async (tag) => {
                 const commitRes = await axios.get(tag.commit.url);
                 const date = commitRes.data.commit.author.date;
-                console.log(tag);
 
                 return {
                     tag,
