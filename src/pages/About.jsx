@@ -88,12 +88,12 @@ const About = () => {
                 {releases.map((release, index) => (
                     <div key={index}>
                         <a
-                            href={release.url}
+                            href={release.tag.zipball_url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-500 hover:underline"
                         >
-                            {release.name}
+                            {release.tag.name}
                         </a>
                         <span className="text-gray-400"> – {formatDate(new Date(release.date).toLocaleDateString())}</span>
                     </div>

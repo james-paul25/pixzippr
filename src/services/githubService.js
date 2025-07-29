@@ -13,10 +13,10 @@ const fetchReleases = async () => {
             tags.map(async (tag) => {
                 const commitRes = await axios.get(tag.commit.url);
                 const date = commitRes.data.commit.author.date;
+                console.log(tag);
 
                 return {
-                    name: tag.name,
-                    url: `${import.meta.env.VITE_GITHUB_COMMIT_URL}/${tag.commit.sha}`,
+                    tag,
                     date,
                 };
             })
