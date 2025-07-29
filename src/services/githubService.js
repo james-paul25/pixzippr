@@ -16,7 +16,7 @@ const fetchReleases = async () => {
 
                 return {
                     name: tag.name,
-                    url: `https://api.github.com/repos/james-paul25/pixzippr/commits/${tag.commit.sha}`,
+                    url: `${import.meta.env.VITE_GITHUB_COMMIT_URL}/${tag.commit.sha}`,
                     date,
                 };
             })
