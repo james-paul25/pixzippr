@@ -60,27 +60,39 @@ const useWatermarkCanvas = (image, settings, onSettingsChange) => {
         }
     }, [settings.src, settings.type, drawCanvas]);
 
-    const handleMouseDown = (e) => {
+    const handlePointerDown = (x, y) => {
         setDragging(true);
         const rect = canvasRef.current.getBoundingClientRect();
         setOffset({
-            x: e.clientX - rect.left - (settings.left || 0),
-            y: e.clientY - rect.top - (settings.top || 0),
+            x: x - rect.left - (settings.left || 0),
+            y: y - rect.top - (settings.top || 0),
         });
     };
 
-    const handleMouseMove = (e) => {
+    const handlePointerMove = (x, y) => {
         if (!dragging) return;
         const rect = canvasRef.current.getBoundingClientRect();
-        const left = e.clientX - rect.left - offset.x;
-        const top = e.clientY - rect.top - offset.y;
+        const left = x - rect.left - offset.x;
+        const top = y - rect.top - offset.y;
 
         const newSettings = { ...settings, left, top };
         onSettingsChange(newSettings);
         drawCanvas();
     };
 
+    const handleMouseDown = (e) => handlePointerDown(e.clientX, e.clientY);
+    const handleMouseMove = (e) => handlePointerMove(e.clientX, e.clientY);
     const handleMouseUp = () => setDragging(false);
+
+    const handleTouchStart = (e) => {
+        const touch = e.touches[0];
+        handlePointerDown(touch.clientX, touch.clientY);
+    };
+    const handleTouchMove = (e) => {
+        const touch = e.touches[0];
+        handlePointerMove(touch.clientX, touch.clientY);
+    };
+    const handleTouchEnd = () => setDragging(false);
 
     return {
         canvasRef,
@@ -88,6 +100,9 @@ const useWatermarkCanvas = (image, settings, onSettingsChange) => {
         handleMouseDown,
         handleMouseMove,
         handleMouseUp,
+        handleTouchStart,
+        handleTouchMove,
+        handleTouchEnd,
     };
 };
 

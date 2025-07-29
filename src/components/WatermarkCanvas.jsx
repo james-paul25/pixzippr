@@ -9,6 +9,9 @@ const WatermarkCanvas = ({ image, settings, onSettingsChange }) => {
         handleMouseDown,
         handleMouseMove,
         handleMouseUp,
+        handleTouchStart,
+        handleTouchMove,
+        handleTouchEnd,
     } = useWatermarkCanvas(image, settings, onSettingsChange);
 
     useEffect(() => {
@@ -23,6 +26,9 @@ const WatermarkCanvas = ({ image, settings, onSettingsChange }) => {
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
             >
                 <canvas ref={canvasRef} className="max-w-full" />
             </div>
