@@ -81,6 +81,8 @@ const About = () => {
                 </ul>
             </div>
 
+            <hr className="my-10 border-gray-300 dark:border-gray-600" />
+
             <div className="mt-10 text-sm text-gray-500 dark:text-gray-400">
                 <strong>Releases</strong>
                 {releases.map((release, index) => (
