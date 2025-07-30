@@ -95,7 +95,7 @@ const useWatermarkCanvas = (image, settings, onSettingsChange) => {
     const handleTouchEnd = useCallback(() => {
             setDragging(false);
     }, [])
-    // 💡 Attach non-passive touch events to prevent scroll
+    
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
