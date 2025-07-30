@@ -9,9 +9,6 @@ const WatermarkCanvas = ({ image, settings, onSettingsChange }) => {
         handleMouseDown,
         handleMouseMove,
         handleMouseUp,
-        handleTouchStart,
-        handleTouchMove,
-        handleTouchEnd,
     } = useWatermarkCanvas(image, settings, onSettingsChange);
 
     useEffect(() => {
@@ -21,14 +18,11 @@ const WatermarkCanvas = ({ image, settings, onSettingsChange }) => {
     return (
         <div className="mt-8 flex flex-col lg:flex-row gap-6">
             <div
-                className="relative border rounded shadow max-w-full overflow-hidden"
+                className="relative border rounded shadow max-w-full overflow-hidden touch-none"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
             >
                 <canvas ref={canvasRef} className="max-w-full" />
             </div>

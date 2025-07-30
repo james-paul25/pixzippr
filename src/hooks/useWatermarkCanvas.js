@@ -60,16 +60,16 @@ const useWatermarkCanvas = (image, settings, onSettingsChange) => {
         }
     }, [settings.src, settings.type, drawCanvas]);
 
-    const handlePointerDown = (x, y) => {
+    const handlePointerDown = useCallback((x, y) => {
         setDragging(true);
         const rect = canvasRef.current.getBoundingClientRect();
         setOffset({
             x: x - rect.left - (settings.left || 0),
             y: y - rect.top - (settings.top || 0),
         });
-    };
+    }, [settings]);
 
-    const handlePointerMove = (x, y) => {
+    const handlePointerMove = useCallback((x, y) => {
         if (!dragging) return;
         const rect = canvasRef.current.getBoundingClientRect();
         const left = x - rect.left - offset.x;
@@ -78,21 +78,51 @@ const useWatermarkCanvas = (image, settings, onSettingsChange) => {
         const newSettings = { ...settings, left, top };
         onSettingsChange(newSettings);
         drawCanvas();
-    };
+    }, [dragging, drawCanvas, offset, onSettingsChange, settings]);
 
     const handleMouseDown = (e) => handlePointerDown(e.clientX, e.clientY);
     const handleMouseMove = (e) => handlePointerMove(e.clientX, e.clientY);
     const handleMouseUp = () => setDragging(false);
 
-    const handleTouchStart = (e) => {
+    const handleTouchStart = useCallback((e) => {
         const touch = e.touches[0];
         handlePointerDown(touch.clientX, touch.clientY);
-    };
-    const handleTouchMove = (e) => {
+    }, [handlePointerDown]);
+    const handleTouchMove = useCallback((e) => {
         const touch = e.touches[0];
         handlePointerMove(touch.clientX, touch.clientY);
-    };
-    const handleTouchEnd = () => setDragging(false);
+    }, [handlePointerMove]);
+    const handleTouchEnd = useCallback(() => {
+            setDragging(false);
+    }, [])
+    // 💡 Attach non-passive touch events to prevent scroll
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const handleTouchStartWrapper = (e) => {
+            e.preventDefault();
+            handleTouchStart(e);
+        };
+        const handleTouchMoveWrapper = (e) => {
+            e.preventDefault();
+            handleTouchMove(e);
+        };
+        const handleTouchEndWrapper = (e) => {
+            e.preventDefault();
+            handleTouchEnd(e);
+        };
+
+        canvas.addEventListener('touchstart', handleTouchStartWrapper, { passive: false });
+        canvas.addEventListener('touchmove', handleTouchMoveWrapper, { passive: false });
+        canvas.addEventListener('touchend', handleTouchEndWrapper, { passive: false });
+
+        return () => {
+            canvas.removeEventListener('touchstart', handleTouchStartWrapper);
+            canvas.removeEventListener('touchmove', handleTouchMoveWrapper);
+            canvas.removeEventListener('touchend', handleTouchEndWrapper);
+        };
+    }, [handleTouchStart, handleTouchMove, handleTouchEnd]);
 
     return {
         canvasRef,
@@ -100,9 +130,6 @@ const useWatermarkCanvas = (image, settings, onSettingsChange) => {
         handleMouseDown,
         handleMouseMove,
         handleMouseUp,
-        handleTouchStart,
-        handleTouchMove,
-        handleTouchEnd,
     };
 };
 
