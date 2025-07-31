@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MessageCircle, X } from 'lucide-react';
-import ReportModal from '../modals/ReportModal';
+import ReportModal from '../../modals/ReportModal';
 
 const FeedbackWidget = () => {
     const [open, setOpen] = useState(false);

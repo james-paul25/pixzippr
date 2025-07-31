@@ -6,7 +6,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import About from './pages/About';
 import Upload from './pages/Upload';
-import FeedbackWidget from './components/FeedbackWidget';
+import FeedbackWidget from './components/ui/FeedbackWidget';
 
 function App() {
   return (

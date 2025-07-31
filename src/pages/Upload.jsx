@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import DropzoneUploader from '../components/DropzoneUploader';
-import ImagePreviewGrid from '../components/ImagePreviewGrid';
+import DropzoneUploader from '../components/ui/DropzoneUploader';
+import ImagePreviewGrid from '../components/ui/ImagePreviewGrid';
 import WatermarkCanvas from '../components/WatermarkCanvas';
-import WatermarkButton from '../components/WatermarkButton';
+import WatermarkButton from '../components/ui/WatermarkButton';
 import ProgressModal from '../modals/ProgressModal';
 
 import { addWatermarkAndZip } from '../utils/imageUtils';
