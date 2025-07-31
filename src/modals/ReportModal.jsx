@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import { useEscapeClose } from '../hooks/useEscapeClose';
 import { handleReportSubmit } from '../services/reportService';
+import TextInput from '../components/ui/TextInput';
+import SelectInput from '../components/ui/SelectInput';
+import SubmitButton from '../components/ui/SubmitButton';
+import TextareaInput from '../components/ui/TextAreaInput';
+
 const ReportModal = ({ isOpen, onClose }) => {
     useEscapeClose(onClose);
 
-    const [name, setName] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [title, setTitle] = useState(null);
-    const [type, setType] = useState(null);
-    const [description, setDescription] = useState(null);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [title, setTitle] = useState('');
+    const [type, setType] = useState('');
+    const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
@@ -34,7 +39,7 @@ const ReportModal = ({ isOpen, onClose }) => {
             setError,
             resetForm,
             onClose,
-          });
+        });
     };
 
     if (!isOpen) return null;
@@ -48,100 +53,64 @@ const ReportModal = ({ isOpen, onClose }) => {
                 >
                     ✕
                 </button>
+
                 <h2 className="text-xl font-semibold text-indigo-600 dark:text-indigo-400 mb-4">Report an Issue</h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                     Report any issues or concerns you have encountered.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="text-sm font-medium">Name</label>
-                        <input
-                            type="text"
-                            placeholder="John Doe"
-                            className="w-full p-2 mt-1 rounded border dark:bg-gray-700 dark:text-white"
-                            value={name || ""}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </div>
+                    <TextInput
+                        label="Name"
+                        type="text"
+                        placeholder="John Doe"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
 
-                    <div>
-                        <label className="text-sm font-medium">Email</label>
-                        <input
-                            type="email"
-                            placeholder="johndoe@example.com"
-                            className="w-full p-2 mt-1 rounded border dark:bg-gray-700 dark:text-white"
-                            value={email || ""}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
+                    <TextInput
+                        label="Email"
+                        type="email"
+                        placeholder="johndoe@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
 
-                    <div>
-                        <label className="text-sm font-medium">Report Type</label>
-                        <select
-                            name="type"
-                            className="w-full p-2 mt-1 rounded border dark:bg-gray-700 dark:text-white"
-                            value={type}
-                            onChange={(e) => setType(e.target.value)}
-                            required
-                        >
-                            <option value="">Select Type</option>
-                            <option value="bug">Bug</option>
-                            <option value="ui">UI/UX Issue</option>
-                            <option value="feedback">Feedback</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
+                    <SelectInput
+                        label="Report Type"
+                        value={type}
+                        onChange={(e) => setType(e.target.value)}
+                        required
+                        options={[
+                            { value: 'bug', label: 'Bug' },
+                            { value: 'ui', label: 'UI/UX Issue' },
+                            { value: 'feedback', label: 'Feedback' },
+                            { value: 'other', label: 'Other' },
+                        ]}
+                    />
 
-                    <div>
-                        <label className="text-sm font-medium">Title</label>
-                        <input
-                            type="text"
-                            name="title"
-                            className="w-full p-2 mt-1 rounded border dark:bg-gray-700 dark:text-white"
-                            placeholder="Enter report title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            required
-                        />
-                    </div>
+                    <TextInput
+                        label="Title"
+                        type="text"
+                        placeholder="Enter report title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        required
+                    />
 
-                    <div>
-                        <label className="text-sm font-medium">Description</label>
-                        <textarea
-                            name="description"
-                            rows="4"
-                            className="w-full p-2 mt-1 rounded border dark:bg-gray-700 dark:text-white"
-                            placeholder="Provide detailed explanation..."
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            required
-                        />
-                    </div>
-
+                    <TextareaInput
+                        label="Description"
+                        placeholder="Provide detailed explanation..."
+                        rows="4"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        required
+                    />
 
                     <div className="flex flex-col items-end gap-2 pt-2 w-full">
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="flex items-center justify-center gap-2 px-4 py-2 rounded bg-blue-600 text-white disabled:opacity-50 min-w-[100px]"
-                        >
-                            {loading ? (
-                                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                            ) : success ? (
-                                <>
-                                    <span className="text-green-300">✔</span>
-                                </>
-                            ) : (
-                                'Submit'
-                            )}
-                        </button>
-
+                        <SubmitButton loading={loading} success={success} />
                         {error && <p className="text-red-500 text-sm">{error}</p>}
-                        {success && <p className="text-green-500 text-sm"></p>}
                     </div>
-
-
                 </form>
             </div>
         </div>
