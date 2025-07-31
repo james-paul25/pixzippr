@@ -1,134 +1,114 @@
 import React from 'react';
+import TextInput from './ui/TextInput';
+import SelectInput from './ui/SelectInput';
+import RangeInput from './ui/RangeInput';
+import FileInput from './ui/FileInput';
 
 const WatermarkControls = ({ settings, onSettingsChange }) => {
+    const handleChange = (key, value) => {
+        onSettingsChange({ ...settings, [key]: value });
+    };
+
     return (
         <div className="w-full lg:w-96 space-y-4">
-            <div>
-                <label className="block mb-1 font-semibold">Watermark Type</label>
-                <select
-                    value={settings.type}
-                    onChange={(e) => onSettingsChange({ ...settings, type: e.target.value })}
-                    className="w-full border p-2 rounded"
-                >
-                    <option value="text">Text</option>
-                    <option value="image">Image</option>
-                </select>
-            </div>
+            <SelectInput
+                label="Watermark Type"
+                value={settings.type}
+                onChange={(e) => handleChange('type', e.target.value)}
+                options={[
+                    { value: 'text', label: 'Text' },
+                    { value: 'image', label: 'Image' },
+                ]}
+            />
 
             {settings.type === 'text' ? (
                 <>
-                    <div>
-                        <label className="block mb-1 font-semibold">Text</label>
-                        <input
-                            type="text"
-                            value={settings.text}
-                            onChange={(e) => onSettingsChange({ ...settings, text: e.target.value })}
-                            className="w-full border p-2 rounded"
-                        />
-                    </div>
-                    <div className="flex gap-2">
-                        <input
+                    <TextInput
+                        label="Text"
+                        type="text"
+                        value={settings.text}
+                        onChange={(e) => handleChange('text', e.target.value)}
+                    />
+                    <div className="row gap-2">
+                        <TextInput
                             type="number"
                             min="8"
                             max="100"
-                            value={settings.fontSize}
-                            onChange={(e) =>
-                                onSettingsChange({ ...settings, fontSize: parseInt(e.target.value) })
-                            }
-                            className="w-1/2 border p-2 rounded"
                             placeholder="Font size"
+                            value={settings.fontSize}
+                            onChange={(e) => handleChange('fontSize', parseInt(e.target.value))}
                         />
-                        <select
+                        <SelectInput
                             value={settings.fontFamily}
-                            onChange={(e) => onSettingsChange({ ...settings, fontFamily: e.target.value })}
-                            className="w-1/2 border p-2 rounded"
-                        >
-                            <option value="Arial">Arial</option>
-                            <option value="Verdana">Verdana</option>
-                            <option value="Georgia">Georgia</option>
-                            <option value="Courier New">Courier New</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block mb-1 font-semibold">Color</label>
-                        <input
-                            type="color"
-                            value={settings.color}
-                            onChange={(e) => onSettingsChange({ ...settings, color: e.target.value })}
-                            className="w-full"
+                            onChange={(e) => handleChange('fontFamily', e.target.value)}
+                            options={[
+                                { value: 'Arial', label: 'Arial' },
+                                { value: 'Verdana', label: 'Verdana' },
+                                { value: 'Georgia', label: 'Georgia' },
+                                { value: 'Courier New', label: 'Courier New' },
+                            ]}
                         />
                     </div>
+                    <TextInput
+                        label="Color"
+                        type="color"
+                        value={settings.color}
+                        onChange={(e) => handleChange('color', e.target.value)}
+                    />
                 </>
             ) : (
                 <>
-                    <div>
-                        <label className="block mb-1 font-semibold">Upload Watermark Image</label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                                const file = e.target.files[0];
-                                if (file) {
-                                    const reader = new FileReader();
-                                    reader.onload = () => {
-                                        onSettingsChange({
-                                            ...settings,
-                                            src: reader.result,
-                                            width: 100,
-                                            height: 100,
-                                        });
-                                    };
-                                    reader.readAsDataURL(file);
-                                }
-                            }}
-                            className="w-full border p-2 rounded"
-                        />
-                    </div>
+                    <FileInput
+                        label="Upload Watermark Image"
+                        accept="image/*"
+                        onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = () => {
+                                    onSettingsChange({
+                                        ...settings,
+                                        src: reader.result,
+                                        width: 100,
+                                        height: 100,
+                                    });
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        }}
+                    />
                     <div className="flex gap-2">
-                        <input
-                            type="number"
-                            placeholder="Width"
-                            value={settings.width || ''}
-                            onChange={(e) =>
-                                onSettingsChange({ ...settings, width: parseInt(e.target.value) || 100 })
-                            }
-                            className="w-1/2 border p-2 rounded"
-                        />
-                        <input
-                            type="number"
-                            placeholder="Height"
-                            value={settings.height || ''}
-                            onChange={(e) =>
-                                onSettingsChange({ ...settings, height: parseInt(e.target.value) || 100 })
-                            }
-                            className="w-1/2 border p-2 rounded"
-                        />
+                            <TextInput
+                                type="number"
+                                placeholder="Width"
+                                value={settings.width || ''}
+                                onChange={(e) => handleChange('width', parseInt(e.target.value) || 100)}
+                            />
+                            <TextInput
+                                type="number"
+                                placeholder="Height"
+                                value={settings.height || ''}
+                                onChange={(e) => handleChange('height', parseInt(e.target.value) || 100)}  
+                            />
                     </div>
                 </>
             )}
 
-            <div>
-                <label className="block mb-1 font-semibold">Opacity</label>
-                <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={settings.opacity}
-                    onChange={(e) => onSettingsChange({ ...settings, opacity: parseFloat(e.target.value) })}
-                    className="w-full"
-                />
-            </div>
+            <RangeInput
+                label="Opacity"
+                min="0"
+                max="1"
+                step="0.01"
+                value={settings.opacity}
+                onChange={(e) => handleChange('opacity', parseFloat(e.target.value))}
+            />
 
-            <div>
-                <label className="block mb-1 font-semibold">Rotation (degrees)</label>
-                <input
-                    type="number"
-                    value={settings.angle}
-                    onChange={(e) => onSettingsChange({ ...settings, angle: parseInt(e.target.value) })}
-                    className="w-full border p-2 rounded"
-                />
-            </div>
+            <TextInput
+                label="Rotation (degrees)"
+                type="number"
+                value={settings.angle}
+                onChange={(e) => handleChange('angle', parseInt(e.target.value))}
+            />
         </div>
     );
 };
